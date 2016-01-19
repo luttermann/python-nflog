@@ -1,9 +1,11 @@
 import nflog
+import select
 
 def nfprint(*args):
-    print(args[1])
-    print("{:x}".format(args[2]))
-    print(args[3])
+    print('Interface: {}'.format(args[1]))
+    print("Ethertype: 0x{:04x}".format(args[2]))
+    print('Pkt size: {}'.format(args[3]))
+    print('Pkt:')
     i = 0
     end = ' '
     for c in args[4]:
@@ -17,13 +19,21 @@ def nfprint(*args):
             end = '  '
             i = i + 1
         print("{:02x}".format(int(c)), end=end)
-    print()
+    print('\n')
 
 nflog.setgroup(1) 
 
 nflog.setcb(nfprint)
 nflog.start()
-n = nflog.handle() 
 
+timeout = 5000
+fd = nflog.getfd()
+poll_handle = select.poll()
+poll_handle.register(fd, select.POLLIN)
 
-print("Recv {} bytes in internal buffer.".format(n))
+plist = poll_handle.poll(timeout)
+
+if len(plist) > 0:
+    nflog.handle()
+else:
+    print('Nothing was recivede before {}ms'.format(timeout))
