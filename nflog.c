@@ -10,7 +10,7 @@
 
 static bool nflog_running = false;
 static int nflog_group_id = 0;
-static int nflog_nf_fd;
+static int nflog_nf_fd = -1;
 struct nflog_handle *nflog_h;
 struct nflog_g_handle *nflog_qh;
 
@@ -29,6 +29,16 @@ static PyObject *nflog_nflog_setgroup(PyObject *self, PyObject *args)
         return NULL;
     }
     PyObject *ret = Py_BuildValue("z", NULL);
+    return ret;
+}
+
+static PyObject *nflog_nflog_getfd(PyObject *self, PyObject *args)
+{
+    if (nflog_nf_fd < 0) {
+        PyObject *ret = Py_BuildValue("z", NULL);
+        return ret;
+    }
+    PyObject *ret = Py_BuildValue("i", nflog_nf_fd);
     return ret;
 }
 
@@ -151,6 +161,7 @@ static PyObject *nflog_nflog_stop(PyObject *self, PyObject *args)
 }
 
 static PyMethodDef nflogMethods[] = {
+    {"getfd", nflog_nflog_getfd, METH_NOARGS, "Get the fd for nflog, to use with poll or select"},
     {"setgroup", nflog_nflog_setgroup, METH_VARARGS,"Set the nflog group num."},
     {"getgroup", nflog_nflog_getgroup, METH_NOARGS, "Get the nflog group num."},
     {"setcb", nflog_nflog_setcb, METH_VARARGS, "Set callback method."},
