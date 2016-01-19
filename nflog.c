@@ -23,7 +23,7 @@ static PyObject *nflog_nflog_setgroup(PyObject *self, PyObject *args)
         PyErr_SetString(PyExc_TypeError, "Wrong type, needs integer input.");
         return NULL;
     }
-    if (!nflog_running)
+    if (nflog_running)
     {
         PyErr_SetString(PyExc_RuntimeError, "Can not change group when started.");
         return NULL;
