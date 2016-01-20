@@ -12,7 +12,9 @@ def nf_callback_packet_handler(
       ifname,       # (str) Network device name
       proto,        # (int) Ethertype, see net/ethernet.h
       payload_len,  # (int) Length of payload
-      payload       # (bytes) Payload
+      payload,      # (bytes) Payload
+      hw_hdr_len,   # (int) Length of hardware link-layer header
+      hw_hdr,       # (bytes) Hardware header
     ):
   pass
 
