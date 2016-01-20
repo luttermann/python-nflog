@@ -3,7 +3,7 @@ from distutils.core import setup, Extension
 
 setup(
         name="nflog",
-        version='0.1.1',
+        version='0.1.2',
         author='Lasse Luttermann Poulsen',
         author_email='llp@k-net.dk',
         url='https://github.com/luttermann/python-nflog',

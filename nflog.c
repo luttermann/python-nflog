@@ -72,7 +72,6 @@ static PyObject *nflog_nflog_setcb(PyObject *dummy, PyObject *args)
 static int cb(struct nflog_g_handle *gh, struct nfgenmsg *nfmsg,
         struct nflog_data *nfa, void *data)
 {
-    //print_pkt(nfa);
     struct nfulnl_msg_packet_hdr *ph = nflog_get_msg_packet_hdr(nfa);
     u_int32_t indev = nflog_get_indev(nfa);
     char *payload;
@@ -82,6 +81,9 @@ static int cb(struct nflog_g_handle *gh, struct nfgenmsg *nfmsg,
 
     payload_len = nflog_get_payload(nfa, &payload);
 
+    char *hwll_hdr = nflog_get_msg_packet_hwhdr(nfa);
+    int hwll_hdr_len = nflog_get_msg_packet_hwhdrlen(nfa);
+
     if (ph) {
         proto = ntohs(ph->hw_protocol);
     }
@@ -89,13 +91,16 @@ static int cb(struct nflog_g_handle *gh, struct nfgenmsg *nfmsg,
     if (indev > 0)
         if_indextoname(indev, ifname);
 
-    PyObject *arglist = Py_BuildValue("(isiiy#)",
+    PyObject *arglist = Py_BuildValue("(isiiy#iy#)",
             indev,              // i
             ifname,             // s
             proto,              // i
             payload_len,        // i
             payload,            // y#
-            payload_len         // ^^
+            payload_len,        // ^^
+            hwll_hdr_len,       // i
+            hwll_hdr,           // y#
+            hwll_hdr_len        // ^^
             );
     PyObject_CallObject(nflog_py_cb, arglist);
     Py_DECREF(arglist);
