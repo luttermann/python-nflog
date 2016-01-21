@@ -166,13 +166,24 @@ static PyObject *nflog_nflog_stop(PyObject *self, PyObject *args)
 }
 
 static PyMethodDef nflogMethods[] = {
-    {"getfd", nflog_nflog_getfd, METH_NOARGS, "Get the fd for nflog, to use with poll or select"},
-    {"setgroup", nflog_nflog_setgroup, METH_VARARGS,"Set the nflog group num."},
-    {"getgroup", nflog_nflog_getgroup, METH_NOARGS, "Get the nflog group num."},
-    {"setcb", nflog_nflog_setcb, METH_VARARGS, "Set callback method."},
-    {"start", nflog_nflog_start, METH_NOARGS, "Start the nflog listener."},
-    {"handle", nflog_nflog_handle, METH_NOARGS, "Read from internal buffer, and handle with CB."},
-    {"stop", nflog_nflog_stop, METH_NOARGS, "Stop the nflog reading."},
+    {"getfd", nflog_nflog_getfd, METH_NOARGS, 
+        "Get the fd for nflog. This should only be used with poll or select, "
+        "to check if there is new data. This function will return the fd as "
+        "an int, or None if run before nflog.start()"},
+    {"setgroup", nflog_nflog_setgroup, METH_VARARGS,
+        "Set the nflog group num."},
+    {"getgroup", nflog_nflog_getgroup, METH_NOARGS,
+        "Returns the nflog group num."},
+    {"setcb", nflog_nflog_setcb, METH_VARARGS,
+        "Set callback method that sould actually handle the incomeing packet."
+        "\nThe method must have 7 parameters:\n  def callback(indev, ifname, "
+        "proto, payload_len, payload, hwll_hdr_len, hwll_hdr):\n    pass"},
+    {"start", nflog_nflog_start, METH_NOARGS,
+        "Start the nflog listener."},
+    {"handle", nflog_nflog_handle, METH_NOARGS,
+        "Read from internal buffer, and handle with CB."},
+    {"stop", nflog_nflog_stop, METH_NOARGS,
+        "Stop the nflog reading."},
     {NULL, NULL, 0, NULL}
 };
 

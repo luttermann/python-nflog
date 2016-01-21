@@ -1,11 +1,12 @@
 from distutils.core import setup, Extension
-# import numpy.distutils.misc_util
 
 setup(
         name="nflog",
         version='0.1.2',
-        author='Lasse Luttermann Poulsen',
+        description='Python interface to NetFilter-log on Linux',
+        author='Lasse Luttermann',
         author_email='llp@k-net.dk',
+        license='BSD',
         url='https://github.com/luttermann/python-nflog',
         classifiers=[
             'Development Status :: 4 - Beta',
@@ -21,6 +22,7 @@ setup(
             'Topic :: Internet :: Log Analysis',
             'Topic :: System :: Networking :: Monitoring'
             ],
+        keywords='nflog linux',
         ext_modules=[Extension(
             name="nflog",
             sources=["nflog.c"],

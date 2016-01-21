@@ -1,0 +1,2 @@
+# Make sure the license file is distributed with the binary package
+include LICENSE.txt
