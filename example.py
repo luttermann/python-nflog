@@ -54,10 +54,10 @@ timeout = 5000
 fd = nflog.getfd()
 poll_handle = select.poll()
 poll_handle.register(fd, select.POLLIN)
+import time
+t0 = time.time()
 
-plist = poll_handle.poll(timeout)
-
-if len(plist) > 0:
-    nflog.handle()
-else:
-    print('Nothing was recivede before {}ms'.format(timeout))
+while time.time() < (t0 + 600):
+    plist = poll_handle.poll(timeout)
+    if len(plist) > 0:
+        nflog.handle()
