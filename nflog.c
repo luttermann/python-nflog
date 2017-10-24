@@ -74,6 +74,8 @@ static int cb(struct nflog_g_handle *gh, struct nfgenmsg *nfmsg,
 {
     struct nfulnl_msg_packet_hdr *ph = nflog_get_msg_packet_hdr(nfa);
     u_int32_t indev = nflog_get_indev(nfa);
+    u_int32_t outdev = nflog_get_outdev(nfa);
+
     char *payload;
     int payload_len;
     char ifname[20] = {0};
@@ -91,8 +93,12 @@ static int cb(struct nflog_g_handle *gh, struct nfgenmsg *nfmsg,
     if (indev > 0)
         if_indextoname(indev, ifname);
 
-    PyObject *arglist = Py_BuildValue("(isiiy#iy#)",
+    if (outdev > 0)
+        if_indextoname(outdev, ifname);
+
+    PyObject *arglist = Py_BuildValue("(iisiiy#iy#)",
             indev,              // i
+            outdev,             // i
             ifname,             // s
             proto,              // i
             payload_len,        // i
@@ -166,7 +172,7 @@ static PyObject *nflog_nflog_stop(PyObject *self, PyObject *args)
 }
 
 static PyMethodDef nflogMethods[] = {
-    {"getfd", nflog_nflog_getfd, METH_NOARGS, 
+    {"getfd", nflog_nflog_getfd, METH_NOARGS,
         "Get the fd for nflog. This should only be used with poll or select, "
         "to check if there is new data. This function will return the fd as "
         "an int, or None if run before nflog.start()"},
