@@ -3,6 +3,7 @@ import select
 
 def nfprint(
         indev,
+        outdev,
         ifname,
         proto,
         payload_len,
