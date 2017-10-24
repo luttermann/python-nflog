@@ -8,7 +8,8 @@ This is a basic example, the **nf_callback_packet_handler** obviously needs to b
 ```python
 
 def nf_callback_packet_handler(
-      indev,        # (int) Network device number
+      indev,        # (int) Inbound network device number
+      outdev,       # (int) Outbound network device number
       ifname,       # (str) Network device name
       proto,        # (int) Ethertype, see net/ethernet.h
       payload_len,  # (int) Length of payload
