@@ -58,7 +58,6 @@ static PyObject *nflog_nflog_setcb(PyObject *dummy, PyObject *args)
             PyErr_SetString(PyExc_TypeError, "parameter must be callable");
             return NULL;
         }
-        Py_XINCREF(temp);
         Py_XDECREF(nflog_py_cb);
         nflog_py_cb = temp;
 
